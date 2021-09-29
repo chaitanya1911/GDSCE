@@ -21,7 +21,7 @@ SECRET_KEY = 'foq211^89zn=-bym^kxc@ue5ji3xr!17lvi34diz8q$k&g)ey$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://young-crag-43112.herokuapp.com','127.0.0.1']
 
 
 # Application definition
