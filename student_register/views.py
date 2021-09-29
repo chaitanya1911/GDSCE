@@ -69,7 +69,7 @@ def student_form(request, id=0):
     token=request.COOKIES.get('jwt')
 
     if not token:
-        return Response("Unauthenticated!")
+        return response.HttpResponse("Unauthenticated!")
     try:
         if request.method == "GET":
             if id == 0:
