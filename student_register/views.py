@@ -20,7 +20,7 @@ class logoutView(APIView):
 class createToken(APIView):
     def post(self,request):
         payload={
-       'exp':datetime.datetime.utcnow()+datetime.timedelta(minutes=60),
+       'exp':datetime.datetime.utcnow()+datetime.timedelta(minutes=1440),
        'iat':datetime.datetime.utcnow()
         }
         token=jwt.encode(payload,'secret',algorithm='HS256')
@@ -47,38 +47,61 @@ class getRoute(APIView):
 def student_list(request):
    
    
+       token=request.COOKIES.get('jwt')
+       if not token:
+            return response.HttpResponse("Unauthenticated!")
+       try:
+            division=set()
+            data=Student.objects.all()
+            for x in data:
+                division.add(x.division)
+            print(division)
+            return render(request, "student_register/student_list.html", {'student_list': data,'divisions':division})
+       except jwt.ExpiredSignatureError:
+            raise response.HttpResponse('Unauthenticated!')
        
-       division=set()
-       data=Student.objects.all()
-       for x in data:
-           division.add(x.division)
-       print(division)
-       return render(request, "student_register/student_list.html", {'student_list': data,'divisions':division})
+       
    
    
 
 
 def student_form(request, id=0):
-    if request.method == "GET":
-        if id == 0:
-            form = StudentForm()
+    token=request.COOKIES.get('jwt')
+
+    if not token:
+        return Response("Unauthenticated!")
+    try:
+        if request.method == "GET":
+            if id == 0:
+                form = StudentForm()
+            else:
+                student = Student.objects.get(pk=id)
+                form = StudentForm(instance=student)
+            return render(request, "student_register/student_form.html", {'form': form})
         else:
-            student = Student.objects.get(pk=id)
-            form = StudentForm(instance=student)
-        return render(request, "student_register/student_form.html", {'form': form})
-    else:
-        if id == 0:
-            form = StudentForm(request.POST)
-        else:
-            student = Student.objects.get(pk=id)
-            form = StudentForm(request.POST,instance= student)
-        if form.is_valid():
-            form.save()
-        return redirect('/student/list')
+            if id == 0:
+                form = StudentForm(request.POST)
+            else:
+                student = Student.objects.get(pk=id)
+                form = StudentForm(request.POST,instance= student)
+            if form.is_valid():
+                form.save()
+            return redirect('/student/list')
+    except jwt.ExpiredSignatureError:
+        raise response.HttpResponse('Unauthenticated!')
+    
 
 
 def student_delete(request,id):
-    student = Student.objects.get(pk=id)
-    student.delete()
-    return redirect('/student/list')
+    token=request.COOKIES.get('jwt')
+
+    if not token:
+        return response.HttpResponse("Unauthenticated!")
+    try:
+        student = Student.objects.get(pk=id)
+        student.delete()
+        return redirect('/student/list')
+    except jwt.ExpiredSignatureError:
+        raise response.HttpResponse('Unauthenticated!')
+    
 
