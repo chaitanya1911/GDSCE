@@ -1,0 +1,73 @@
+{% extends "student_register/base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+{{token}}
+<table class="table table-borderless" id="table1">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-outline">
+                <input type="text" id="form1" class="form-control" onkeyup="searchId();" placeholder="Search" />
+              </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="row"><div class="col-sm-6">
+                <label class="form-control">Filter By Division</label>
+            </div>
+                <div class="col-sm-6">
+                    <select class="form-control" aria-label="Default select example" onchange="searchByDiv(event)">
+                        <option selected></option>
+                        {% for div in divisions %}
+                        <option >{{div}}</option>
+                        {% endfor %}
+                      </select>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+        
+      
+        
+       
+      
+    <thead class="border-bottom font-weight-bold">
+        <tr id="head">
+            <td>studentId</td>
+            <td>Full Name</td>
+            <td>Division</td>
+            <td>Year</td>
+            <td>
+                <a href="{% url 'student_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add New
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in student_list %}
+            <tr>
+                <td>{{student.studentId}}</td>
+                <td>{{student.fullname}}</td>
+                <td>{{student.division}}</td>
+                <td>{{student.year}}</td>
+                <td>
+                    <a href="{% url 'student_update' student.id %}" class="btn text-secondary px-0">
+                        <i class="far fa-edit fa-lg"></i>
+                    </a>
+                    <form action="{% url 'student_delete' student.id %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script src="{% static 'js/student_list.js' %}"></script>
+
+{% endblock content %}
