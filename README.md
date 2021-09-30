@@ -1,12 +1,16 @@
 # Django-CRUD-Operations
 
-student_insert :           http://127.0.0.1:8000/student/list
+heroku_hosted_link :        https://young-crag-43112.herokuapp.com
 
-createToken :              http://127.0.0.1:8000/getToken
+student_insert :           https://young-crag-43112.herokuapp.com/student
 
-getToken :                 http://127.0.0.1:8000/getRoute
+student_list :             https://young-crag-43112.herokuapp.com/student/list
 
-logout :                   http://127.0.0.1:8000/logout
+createToken :              https://young-crag-43112.herokuapp.com/getToken
+
+getToken :                 https://young-crag-43112.herokuapp.com/getRoute
+
+logout :                   https://young-crag-43112.herokuapp.com/logout
 
 
 
